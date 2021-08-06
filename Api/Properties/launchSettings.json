@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "NServiceBus.CosmosOutbox.Samples.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7001;http://localhost:7000",
+      "launchUrl": "https://localhost:7001/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
