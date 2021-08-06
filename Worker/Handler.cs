@@ -8,11 +8,12 @@ namespace Worker
 {
     public class Handler : IHandleMessages<Post>, IHandleMessages<Comment>
     {
-        public Task Handle(Post message, IMessageHandlerContext context)
+
+        public async Task Handle(Post message, IMessageHandlerContext context)
         {
             var cosmosSession = context.SynchronizedStorageSession.CosmosPersistenceSession();
             cosmosSession.Batch.CreateItem(message, new TransactionalBatchItemRequestOptions());
-            return Task.CompletedTask;
+            await context.Publish(new PostCreated {PostId = message.PostId});
         }
 
         public async Task Handle(Comment message, IMessageHandlerContext context)
@@ -26,6 +27,7 @@ namespace Worker
             {
                 IfMatchEtag = postResource.ETag
             });
+            await context.Publish(new CommentAdded {PostId = message.PostId, CommentId = message.Id});
         }
     }
 }
