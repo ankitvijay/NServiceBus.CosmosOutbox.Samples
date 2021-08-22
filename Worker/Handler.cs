@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Messages;
 using Microsoft.Azure.Cosmos;
 using NServiceBus;
@@ -22,11 +20,8 @@ namespace Worker
             var postResource = await cosmosSession.Container.ReadItemAsync<Post>(message.PostId,
                 new PartitionKey(message.PostId));
             postResource.Resource.LastModified = DateTime.UtcNow;
-            cosmosSession.Batch.CreateItem(message, new TransactionalBatchItemRequestOptions());
-            cosmosSession.Batch.UpsertItem(postResource.Resource, new TransactionalBatchItemRequestOptions
-            {
-                IfMatchEtag = postResource.ETag
-            });
+            cosmosSession.Batch.CreateItem(message);
+            cosmosSession.Batch.UpsertItem(postResource.Resource);
             await context.Publish(new CommentAdded {PostId = message.PostId, CommentId = message.Id});
         }
     }
