@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Messages;
 using Microsoft.Azure.Cosmos;
 using NServiceBus;
@@ -21,7 +23,10 @@ namespace Worker
                 new PartitionKey(message.PostId));
             postResource.Resource.LastModified = DateTime.UtcNow;
             cosmosSession.Batch.CreateItem(message);
-            cosmosSession.Batch.UpsertItem(postResource.Resource);
+            cosmosSession.Batch.UpsertItem(postResource.Resource, new TransactionalBatchItemRequestOptions()
+            {
+                IfMatchEtag = postResource.ETag
+            });
             await context.Publish(new CommentAdded {PostId = message.PostId, CommentId = message.Id});
         }
     }
