@@ -2,10 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using NServiceBus;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseNServiceBus(context =>
+builder.Host.UseNServiceBus(_ =>
 {
     var endpointConfiguration = new EndpointConfiguration("Samples.Api");
     var transport = endpointConfiguration.UseTransport<LearningTransport>();
@@ -40,21 +44,21 @@ app.UseHttpsRedirection()
    .UseSwaggerUI(options => { options.SwaggerEndpoint("v1/swagger.json", "Posts Api"); })
    .UseRouting();
 
-app.MapPost("/create", async(IMessageSession messageSession, [FromBody] Post post) =>
+app.MapPost("/create", async (IMessageSession messageSession, [FromBody] Post post) =>
 {
-    await messageSession.Send(new Messages.Post(post.Topic, post.Description));
-    return Results.Accepted();
+    var addPostCommand = new Messages.AddPost(post.Title, post.Description, post.Author);
+    await messageSession.Send(addPostCommand);
+    return Results.Accepted(null, new { addPostCommand.PostId });
 });
 
-app.MapPost("/add-comment", async (IMessageSession messageSession, [FromBody] Post post) =>
+app.MapPost("/add-comment", async (IMessageSession messageSession, [FromBody] Comment comment) =>
 {
-    await messageSession.Send(new Messages.Post(post.Topic, post.Description));
-    return Results.Accepted();
+    var addCommentCommand = new Messages.AddComment(comment.PostId, comment.Content, comment.CommentBy);
+    await messageSession.Send(addCommentCommand);
+    return Results.Accepted(null, new { addCommentCommand.CommentId });
 });
 
 app.Run();
 
-public record Post(string Topic, string Description);
-public record Comment(string PostId, string Content);
-
-
+public record Post(string Title, string Description, string Author);
+public record Comment(string PostId, string Content, string CommentBy);
