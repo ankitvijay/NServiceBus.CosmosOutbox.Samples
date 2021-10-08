@@ -7,7 +7,7 @@ using NServiceBus.Pipeline;
 
 namespace Worker
 {
-    // See:  See: https://github.com/Particular/docs.particular.net/blob/master/samples/previews/cosmosdb/transactions/CosmosDB_0/Server/OrderIdAsPartitionKeyBehavior.cs
+    // See: https://github.com/Particular/docs.particular.net/blob/master/samples/cosmosdb/transactions/CosmosDB_2/Server/OrderIdAsPartitionKeyBehavior.cs
     public class PostIdAsPartitionKeyBehaviour: Behavior<IIncomingLogicalMessageContext>
     {
         public override Task Invoke(IIncomingLogicalMessageContext context, Func<Task> next)
