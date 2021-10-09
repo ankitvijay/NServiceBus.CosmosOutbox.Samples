@@ -8,8 +8,8 @@
     <ItemGroup>
       <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.1.0" />
       <PackageReference Include="NServiceBus.Transport.AzureServiceBus" Version="1.9.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
-      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.5" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.2" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.2" />
     </ItemGroup>
 
     <ItemGroup>

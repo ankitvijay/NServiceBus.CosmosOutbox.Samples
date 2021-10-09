@@ -8,7 +8,7 @@ using NServiceBus.Pipeline;
 namespace Worker
 {
     // See: https://github.com/Particular/docs.particular.net/blob/master/samples/cosmosdb/transactions/CosmosDB_2/Server/OrderIdAsPartitionKeyBehavior.cs
-    public class PostIdAsPartitionKeyBehaviour: Behavior<IIncomingLogicalMessageContext>
+    public class PostIdAsPartitionKeyBehavior: Behavior<IIncomingLogicalMessageContext>
     {
         public override Task Invoke(IIncomingLogicalMessageContext context, Func<Task> next)
         {
@@ -26,10 +26,10 @@ namespace Worker
         public class Registration : RegisterStep
         {
             public Registration() :
-                base(nameof(PostIdAsPartitionKeyBehaviour),
-                    typeof(PostIdAsPartitionKeyBehaviour),
+                base(nameof(PostIdAsPartitionKeyBehavior),
+                    typeof(PostIdAsPartitionKeyBehavior),
                     "Determines the PartitionKey from the logical message",
-                    b => new PostIdAsPartitionKeyBehaviour())
+                    b => new PostIdAsPartitionKeyBehavior())
             {
                 InsertBefore(nameof(LogicalOutboxBehavior));
             }
