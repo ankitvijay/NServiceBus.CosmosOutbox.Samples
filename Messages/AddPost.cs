@@ -9,7 +9,7 @@ namespace Messages
         {
             Title = title;
             Description = description;
-            Author = author;            
+            Author = author;
             PostId = Guid.NewGuid().ToString();
         }        
         public string PostId { get; set; }

@@ -7,25 +7,8 @@ using Worker.Domain;
 
 namespace Worker
 {
-    public class Handler : IHandleMessages<AddPost>, IHandleMessages<AddComment>
+    public class AddCommentHandler : IHandleMessages<AddComment>
     {
-        public async Task Handle(AddPost message, IMessageHandlerContext context)
-        {
-            var cosmosSession = context.SynchronizedStorageSession.CosmosPersistenceSession();
-            var post = new Post(message.PostId, message.Title, message.Description, message.Author);
-            cosmosSession.Batch.CreateItem(post, new TransactionalBatchItemRequestOptions()
-            {
-
-            });
-            await context.Publish(new PostCreated
-            {
-                PostId = post.PostId,
-                Author = post.Author,
-                Description = post.Description,
-                Title = post.Title
-            });
-        }
-
         public async Task Handle(AddComment message, IMessageHandlerContext context)
         {
             var cosmosSession = context.SynchronizedStorageSession.CosmosPersistenceSession();
@@ -44,10 +27,9 @@ namespace Worker
                 IfMatchEtag = postResource.ETag
             });
 
-            var comment = new Comment(message.PostId,message.CommentId, message.Content,
+            var comment = new Comment(message.PostId, message.CommentId, message.Content,
                 message.CommentBy);
             cosmosSession.Batch.CreateItem(comment);
-
 
             await context.Publish(new CommentAdded
             {

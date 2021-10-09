@@ -13,7 +13,7 @@ await Host.CreateDefaultBuilder(args)
         endpointConfiguration.UsePersistence<CosmosPersistence>()
             // Using Cosmos emulator
             .CosmosClient(new CosmosClient(
-                "AccountEndpoint=https://localhost:9091/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="))
+                "AccountEndpoint=https://localhost:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="))
             .DatabaseName("Twitbook")
             .DefaultContainer("Posts", "/PostId");
 
